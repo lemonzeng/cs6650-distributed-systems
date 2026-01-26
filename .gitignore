@@ -1,0 +1,19 @@
+# --- 1. 隐私与安全 (绝对不能传) ---
+*.pem
+YumengZeng-cs6650-hw1b.pem
+
+# --- 2. Terraform 相关 (极其重要：防止 700MB 插件上传) ---
+# 无论在根目录还是子目录下，只要叫 .terraform 的文件夹一律忽略
+.terraform/
+**/.terraform/
+# 忽略特定的 Terraform 状态文件
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# --- 3. Go 编译产物 (如果在本地运行 go build 会产生) ---
+godocker
+go-docker-demo
+
+# --- 4. 操作系统垃圾 (Mac 系统会自动在后台创建) ---
+.DS_Store
