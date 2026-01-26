@@ -40,6 +40,15 @@ resource "aws_security_group" "ssh" {
     protocol    = "tcp"
     cidr_blocks = [var.ssh_cidr]
   }
+
+  # Update: Allow inbound traffic on port 8080 from any IP
+  ingress {
+    description = "Web App Port"
+    from_port   = 8080
+    to_port     = 8080
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"] # 允许任何 IP 访问 8080
+  }
   egress {
     from_port   = 0
     to_port     = 0
