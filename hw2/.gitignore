@@ -6,6 +6,7 @@ Ignore all key files
 
 *.pem
 YumengZeng-cs6650-hw1b.pem
+key.pem
 
 Ignore Terraform variable files (contains sensitive info like your personal IP)
 
