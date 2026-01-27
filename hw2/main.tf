@@ -17,6 +17,9 @@ provider "aws" {
 
 # Your ec2 instance
 resource "aws_instance" "demo-instance" {
+  # To finish part4, we need to launch two instances
+  count                  =  2
+
   ami                    = data.aws_ami.al2023.id
   instance_type          = "t2.micro"
   iam_instance_profile   = "LabInstanceProfile"
@@ -24,7 +27,11 @@ resource "aws_instance" "demo-instance" {
   key_name               = var.ssh_key_name
 
   tags = {
-    Name = "terraform-created-instance-:)"
+    # Use it to finish part 3 of the homework
+    # Name = "terraform-created-instance-:)"
+
+    # Use it to finish part 4 of the homework
+    Name = "hw2-ec2-instance-${count.index}"
   }
 }
 
@@ -47,7 +54,7 @@ resource "aws_security_group" "ssh" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # 允许任何 IP 访问 8080
+    cidr_blocks = ["0.0.0.0/0"] # allow any IP to access 8080
   }
   egress {
     from_port   = 0
@@ -67,6 +74,18 @@ data "aws_ami" "al2023" {
   }
 }
 
-output "ec2_public_dns" {
-  value = aws_instance.demo-instance.public_dns
+# For Part3: Output the public DNS of the instance
+# output "ec2_public_dns" {
+#   value = aws_instance.demo-instance.public_dns
+# }
+
+# For Part4: Output all public DNSs of both instances
+# --- Use [*] syntax to output all public IPs ---
+output "ec2_public_ips" {
+  value = aws_instance.demo-instance[*].public_ip
 }
+# --- Use [*] syntax to output all public DNSs ---
+output "ec2_public_dns" {
+  value = aws_instance.demo-instance[*].public_dns
+}
+
