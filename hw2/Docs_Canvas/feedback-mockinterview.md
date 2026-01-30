@@ -5,6 +5,7 @@
 
 # Answers
 ### 1. What is the difference among virtual environment, container, image, and AMI?
+![alt text](image-1.png)
 
 These represent different levels of abstraction and isolation:
 
