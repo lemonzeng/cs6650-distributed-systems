@@ -1,0 +1,22 @@
+aws configure 
+aws configure set aws_session_token
+
+ECR_URL=$(aws ecr describe-repositories \
+  --repository-names map-service \
+  --region us-west-2 \
+  --query 'repositories[0].repositoryUri' \
+  --output text)
+
+echo "ECR URL: $ECR_URL"
+--
+ECR_BASE=$(echo $ECR_URL | cut -d'/' -f1)
+
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin $ECR_BASE
+
+docker tag mapreduce-test:latest $ECR_URL:latest
+
+docker buildx build \
+  --builder singlearch \
+  --platform linux/amd64 \
+  --push \
+  -t $ECR_URL .
