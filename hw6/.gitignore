@@ -1,0 +1,23 @@
+# Compiled Go binaries
+src/product-search-bin
+src/product-search
+
+# Go build cache
+*.test
+*.out
+
+# Python / Locust
+__pycache__/
+*.pyc
+.locust_history
+
+# Terraform - provider binaries and state (both Part 2 and Part 3)
+terraform/.terraform/
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform-p3/.terraform/
+terraform-p3/terraform.tfstate
+terraform-p3/terraform.tfstate.backup
+
+# macOS
+.DS_Store

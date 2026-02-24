@@ -54,6 +54,7 @@ func handleRequest(w http.ResponseWriter, r *http.Request) {
 
 // --- Splitter Logic ---
 func runSplitter(w http.ResponseWriter, r *http.Request, client *s3.Client) {
+	// Data Ingestion (The Fetch)
 	url := r.URL.Query().Get("url")
 	resp, _ := http.Get(url)
 	body, _ := io.ReadAll(resp.Body)
@@ -71,6 +72,10 @@ func runSplitter(w http.ResponseWriter, r *http.Request, client *s3.Client) {
 		urls = append(urls, fmt.Sprintf("s3://%s/%s", bucketName, key))
 	}
 
+	// uses Go's json.Encoder to stream the resulting S3
+	// paths back to the client as a JSON array. This ensures
+	// that the output is structured and can be easily parsed by
+	// the next stage of the pipeline (the Mappers).
 	json.NewEncoder(w).Encode(urls)
 }
 
@@ -90,7 +95,9 @@ func runMapper(w http.ResponseWriter, r *http.Request, client *s3.Client) {
 	scanner.Split(bufio.ScanWords)
 
 	for scanner.Scan() {
+		// Normalize the word: convert to lowercase and trim punctuation
 		word := strings.ToLower(scanner.Text())
+		// Remove any non-letter characters from the start and end of the word
 		word = strings.TrimFunc(word, func(r rune) bool {
 			return !unicode.IsLetter(r)
 		})
@@ -99,6 +106,9 @@ func runMapper(w http.ResponseWriter, r *http.Request, client *s3.Client) {
 		}
 	}
 
+	// Upload the result back to S3 with a unique key based on the input chunk's key.
+	// This ensures that each Mapper's output is stored separately and can be easily
+	// retrieved by the Reducer.
 	resultKey := fmt.Sprintf("mapped/result-%s.json", strings.ReplaceAll(key, "/", "-"))
 	jsonData, _ := json.Marshal(counts)
 	uploadToS3(client, resultKey, string(jsonData))
@@ -115,6 +125,9 @@ func runReducer(w http.ResponseWriter, r *http.Request, client *s3.Client) {
 	}
 
 	log.Printf("Reducer starting. Input URLs count: %d", len(finalUrls))
+
+	// Include a safety check to ensure that we have valid URLs to process
+	// before attempting to download from S3.
 	if len(finalUrls) == 0 {
 		http.Error(w, "No URLs provided in query parameters", 400)
 		return
@@ -157,7 +170,8 @@ func runReducer(w http.ResponseWriter, r *http.Request, client *s3.Client) {
 		totalFilesProcessed++
 	}
 
-	// --- 关键保险锁：如果结果为空，不执行上传，防止覆盖掉正确的结果 ---
+	// Before proceeding to upload the final results, we check if the
+	// finalCounts map is empty.
 	if len(finalCounts) == 0 {
 		log.Printf("ABORT: No words were processed. Skipping S3 upload to prevent overwriting data.")
 		http.Error(w, "Reduction resulted in empty map. Check logs for S3 download failures.", 500)

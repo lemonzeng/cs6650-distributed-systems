@@ -6,7 +6,7 @@ import re
 import os
 
 # ==========================================
-# 1. Result Verification
+#  Result Verification
 # ==========================================
 
 def get_ground_truth(url):
@@ -20,7 +20,7 @@ def get_ground_truth(url):
         response.raise_for_status()
         text = response.text.lower()
         
-        # Counting logic must match the regex in your Go code
+        # Counting logic must match the regex in Go code
         words = re.findall(r'[a-z]+', text)
         total_words = len(words)
         counts = collections.Counter(words)
