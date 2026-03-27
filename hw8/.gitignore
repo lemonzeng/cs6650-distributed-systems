@@ -1,0 +1,16 @@
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/*.tfvars
+
+# Python
+__pycache__/
+*.pyc
+
+# Temp files
+*_tmp.*
+report_tmp.html
+
+# macOS
+.DS_Store
