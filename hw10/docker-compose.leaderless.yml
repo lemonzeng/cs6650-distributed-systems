@@ -1,0 +1,40 @@
+services:
+  node1:
+    build: ./leaderless
+    ports:
+      - "8011:8000"
+    environment:
+      NODE_ID: node1
+      PEER_URLS: "http://node2:8000,http://node3:8000,http://node4:8000,http://node5:8000"
+
+  node2:
+    build: ./leaderless
+    ports:
+      - "8012:8000"
+    environment:
+      NODE_ID: node2
+      PEER_URLS: "http://node1:8000,http://node3:8000,http://node4:8000,http://node5:8000"
+
+  node3:
+    build: ./leaderless
+    ports:
+      - "8013:8000"
+    environment:
+      NODE_ID: node3
+      PEER_URLS: "http://node1:8000,http://node2:8000,http://node4:8000,http://node5:8000"
+
+  node4:
+    build: ./leaderless
+    ports:
+      - "8014:8000"
+    environment:
+      NODE_ID: node4
+      PEER_URLS: "http://node1:8000,http://node2:8000,http://node3:8000,http://node5:8000"
+
+  node5:
+    build: ./leaderless
+    ports:
+      - "8015:8000"
+    environment:
+      NODE_ID: node5
+      PEER_URLS: "http://node1:8000,http://node2:8000,http://node3:8000,http://node4:8000"

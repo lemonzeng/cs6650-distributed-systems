@@ -1,0 +1,24 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Go build artifacts (compiled binaries)
+leader-follower/leader-follower
+leaderless/leaderless
+
+# Generated presentation exports (keep the .md source files)
+presentation_en.html
+presentation_en.pdf
+presentation_en.png
+presentation_en.jpeg
+report_tmp.html
+report.pdf
+
+# macOS
+.DS_Store
+
+# Docker
+*.log

@@ -1,0 +1,8 @@
+services:
+  leader:
+    environment:
+      ROLE: leader
+      NODE_ID: leader
+      W: "1"
+      R: "5"
+      FOLLOWER_URLS: "http://follower1:8000,http://follower2:8000,http://follower3:8000,http://follower4:8000"

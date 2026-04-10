@@ -1,0 +1,43 @@
+services:
+  leader:
+    build: ./leader-follower
+    ports:
+      - "8001:8000"
+    environment:
+      ROLE: leader
+      NODE_ID: leader
+      W: "5"
+      R: "1"
+      FOLLOWER_URLS: "http://follower1:8000,http://follower2:8000,http://follower3:8000,http://follower4:8000"
+
+  follower1:
+    build: ./leader-follower
+    ports:
+      - "8002:8000"
+    environment:
+      ROLE: follower
+      NODE_ID: f1
+
+  follower2:
+    build: ./leader-follower
+    ports:
+      - "8003:8000"
+    environment:
+      ROLE: follower
+      NODE_ID: f2
+
+  follower3:
+    build: ./leader-follower
+    ports:
+      - "8004:8000"
+    environment:
+      ROLE: follower
+      NODE_ID: f3
+
+  follower4:
+    build: ./leader-follower
+    ports:
+      - "8005:8000"
+    environment:
+      ROLE: follower
+      NODE_ID: f4
