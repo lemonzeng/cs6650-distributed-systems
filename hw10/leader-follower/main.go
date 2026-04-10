@@ -35,11 +35,11 @@ var (
 // ---------------------------------------------------------------------------
 
 var (
-	role          string // "leader" | "follower"
-	nodeID        string
-	followerURLs  []string
-	wQuorum       int
-	rQuorum       int
+	role         string // "leader" | "follower"
+	nodeID       string
+	followerURLs []string
+	wQuorum      int
+	rQuorum      int
 )
 
 func envOr(key, def string) string {
@@ -192,6 +192,7 @@ func leaderGet(w http.ResponseWriter, r *http.Request) {
 
 	local, ok := localRead(key)
 
+	// If R=1, return local value immediately without reading followers
 	if rQuorum == 1 {
 		if !ok {
 			http.NotFound(w, r)
@@ -243,6 +244,8 @@ func leaderGet(w http.ResponseWriter, r *http.Request) {
 // Follower handlers
 // ---------------------------------------------------------------------------
 
+// /internal/update is called by leader to apply an update to
+// this follower's local store
 func followerInternalUpdate(w http.ResponseWriter, r *http.Request) {
 	var req updateRequest
 	if err := readBody(r, &req); err != nil || req.Key == "" {
@@ -254,6 +257,7 @@ func followerInternalUpdate(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
+// /internal/read is called by leader to read this follower's local value for a key
 func followerInternalRead(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Query().Get("key")
 	if key == "" {
@@ -270,6 +274,9 @@ func followerInternalRead(w http.ResponseWriter, r *http.Request) {
 }
 
 // Followers respond to client /get and /local_read directly from local store
+// /get is the "normal" read path for followers,
+// which includes an artificial delay to simulate slower response than leader
+// that is what the load tester uses
 func followerGet(w http.ResponseWriter, r *http.Request) {
 	key := r.URL.Query().Get("key")
 	if key == "" {

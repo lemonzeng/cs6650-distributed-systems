@@ -1,0 +1,9 @@
+# SSH private key — never commit
+*.pem
+
+# Terraform state (contains secrets)
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+terraform.tfvars

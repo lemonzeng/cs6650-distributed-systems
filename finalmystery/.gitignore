@@ -1,0 +1,37 @@
+# macOS
+.DS_Store
+
+# Go binaries and build artifacts
+bin/
+albumstore
+*.exe
+*.test
+*.out
+
+# Environment / secrets
+.env
+.env.*
+*.pem
+*_rsa
+*_rsa.pub
+*.key
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Claude Code local settings
+.claude/
+
+# Terraform (infra/ has its own .gitignore but belt-and-suspenders here)
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.backup
+**/*.tfstate.lock.info
+**/.terraform.lock.hcl
+**/terraform.tfvars
+
+# AWS
+.aws/

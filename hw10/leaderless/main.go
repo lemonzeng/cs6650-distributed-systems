@@ -122,6 +122,9 @@ func handleSet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Use current time as version. No central counter needed since 
+	// we only care about relative ordering of versions, and we assume 
+	// clocks are reasonably synchronized.
 	version := time.Now().UnixNano()
 	localWrite(req.Key, req.Value, version)
 

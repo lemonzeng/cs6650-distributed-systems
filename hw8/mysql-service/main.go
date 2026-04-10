@@ -50,6 +50,18 @@ func initDB() {
 	fmt.Println("Database connected and tables ready")
 }
 
+//Two Tables
+
+//   carts                          cart_items
+//   ┌──────────────────────┐       ┌──────────────────────────┐
+//   │ id (PK, AUTO_INC)    │──┐    │ id (PK, AUTO_INC)        │
+//   │ customer_id (INT)    │  └───▶│ cart_id (FK → carts.id)  │
+//   │ created_at (TS)      │       │ product_id (INT)          │
+//   │ INDEX(customer_id)   │       │ quantity (INT)            │
+//   └──────────────────────┘       │ INDEX(cart_id)            │
+//                                  │ UNIQUE(cart_id, product_id)│
+//                                  └──────────────────────────┘
+
 // createTables auto-creates the schema on startup so no manual migration is needed
 func createTables() {
 	_, err := db.Exec(`

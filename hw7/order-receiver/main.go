@@ -35,6 +35,7 @@ type Order struct {
 // With N=5 and 3s per payment, max throughput ≈ 5/3 ≈ 1.7 orders/sec.
 const maxConcurrentPayments = 5
 
+// paymentSlots is a semaphore channel that allows up to maxConcurrentPayments
 var paymentSlots = make(chan struct{}, maxConcurrentPayments)
 
 var (
@@ -62,6 +63,7 @@ func healthHandler(w http.ResponseWriter, r *http.Request) {
 // syncHandler blocks until payment processing completes (up to 3s + queue wait).
 // Under high load the semaphore queue fills up and customers experience long
 // or timed-out responses — this is the failure mode the assignment studies.
+// head-of-line blocking + resource contention causes cascading failures and timeouts.
 func syncHandler(w http.ResponseWriter, r *http.Request) {
 	var order Order
 	if err := json.NewDecoder(r.Body).Decode(&order); err != nil {
@@ -80,6 +82,7 @@ func syncHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[SYNC] Completed order %s", order.OrderID)
 
 	w.Header().Set("Content-Type", "application/json")
+	// 200 OK indicates that the request has succeeded and the order is completed.
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(order)
 }
@@ -95,6 +98,7 @@ func asyncHandler(w http.ResponseWriter, r *http.Request) {
 
 	order.OrderID = generateOrderID()
 	order.CreatedAt = time.Now()
+	// The order-processor will update the status to "processing" and then "completed".
 	order.Status = "pending"
 
 	msgBytes, err := json.Marshal(order)
@@ -116,22 +120,27 @@ func asyncHandler(w http.ResponseWriter, r *http.Request) {
 	log.Printf("[ASYNC] Queued order %s for customer %d", order.OrderID, order.CustomerID)
 
 	w.Header().Set("Content-Type", "application/json")
+	// 202 Accepted indicates that the request has been accepted for processing,
+	// but the processing is not complete.
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(order)
 }
 
 func main() {
+	// Load configuration from environment variables
 	snsTopicARN = os.Getenv("SNS_TOPIC_ARN")
 	if snsTopicARN == "" {
 		log.Fatal("SNS_TOPIC_ARN environment variable is required")
 	}
 
+	// Load AWS configuration and create SNS client
 	cfg, err := config.LoadDefaultConfig(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to load AWS config: %v", err)
 	}
 	snsClient = sns.NewFromConfig(cfg)
 
+	// Set up HTTP handlers
 	http.HandleFunc("/health", healthHandler)
 	http.HandleFunc("/orders/sync", syncHandler)
 	http.HandleFunc("/orders/async", asyncHandler)

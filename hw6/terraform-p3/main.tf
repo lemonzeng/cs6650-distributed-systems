@@ -3,7 +3,7 @@
 #
 # Architecture:
 #   Internet → ALB (port 80) → Target Group → ECS tasks (port 8080)
-#   CloudWatch CPU > 70% → Auto Scaling adds tasks (min 2, max 4)
+#   CloudWatch CPU > 50% → Auto Scaling adds tasks (min 2, max 4)
 
 # Reference the existing ECR repo from Part 2 (no new image needed)
 data "aws_ecr_repository" "app" {

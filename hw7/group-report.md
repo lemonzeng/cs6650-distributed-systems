@@ -115,7 +115,7 @@ Each worker processes one order per 3 seconds, so throughput scales linearly:
 | **1** | ~6.5K–8.5K | Did not drain (15+ min) | ~12,971 | 54.2 | ~5,225 | ~261 min (estimated) |
 | **5** | ~8,460 | Did not drain (1+ hour) | ~23,657 | 53.0 | ~10,204 | ~102 min (estimated) |
 | **20** | ~5,500 | Drained to ~1.1K in ~1h | ~12,879 | 53.4 | ~12,728 | ~31 min (estimated) |
-| **100** | ~11,400 | Did not drain (prior backlog) | ~3,191 | 52.3 | ~7,523 | **~2 min (measured ✅)** |
+| **100** | ~11,400 | Did not drain (prior backlog) | ~3,191 | 52.3 | ~7,523 | **~2 min (measured)** |
 
 > Siwen Wu also measured **In-Flight / Not Visible** messages: 1 worker (−7), 5 workers (44), 20 workers (143), 100 workers (491) — showing that more workers actively hold more messages in-flight simultaneously.
 

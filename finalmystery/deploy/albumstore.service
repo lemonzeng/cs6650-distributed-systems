@@ -1,0 +1,14 @@
+[Unit]
+Description=AlbumStore API
+After=network.target
+
+[Service]
+User=ec2-user
+WorkingDirectory=/opt/albumstore
+EnvironmentFile=/opt/albumstore/.env
+ExecStart=/opt/albumstore/albumstore
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

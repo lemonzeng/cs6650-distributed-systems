@@ -82,8 +82,8 @@ func poll(workerSem chan struct{}) {
 	for {
 		result, err := sqsClient.ReceiveMessage(context.Background(), &sqs.ReceiveMessageInput{
 			QueueUrl:            aws.String(queueURL),
-			MaxNumberOfMessages: 10,  // fetch up to 10 per call
-			WaitTimeSeconds:     20,  // long polling — avoids busy-wait when queue is empty
+			MaxNumberOfMessages: 10, // fetch up to 10 per call
+			WaitTimeSeconds:     20, // long polling — avoids busy-wait when queue is empty
 		})
 		if err != nil {
 			log.Printf("[POLL] ReceiveMessage error: %v — retrying in 5s", err)
