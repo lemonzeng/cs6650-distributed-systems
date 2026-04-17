@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>report_draft.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="cs-6650-final-mastery--report-draft">CS 6650 Final Mastery — Report Draft</h1>
+<hr>
+<p><strong>Q1. Roughly how many submissions did it take before you passed all critical scenarios, and what was the most common failure?</strong></p>
+<p>It took <strong>1 submission</strong> to pass all critical scenarios (S1–S5) and all correctness scenarios (S1–S10), achieving a perfect correctness score of 110/110. The most significant bug caught before submission was an orphaned photo row: when the worker job channel was full and the handler returned 503, the photo row had already been inserted with <code>status='processing'</code> but no worker would ever process it. ChaosArena would have polled it indefinitely. We caught this in pre-deploy code review and fixed it by calling <code>SetFailed()</code> in the 503 path so the row transitions cleanly to <code>failed</code> rather than hanging.</p>
+<hr>
+<p><strong>Q2. Where are your photo files stored, and why did you pick that over other options?</strong></p>
+<p>Photo files are stored in <strong>Amazon S3</strong> (<code>albumstore-photos-zeng</code>, <code>us-west-2</code>). We chose S3 because it produces stable, permanent public URLs (<code>https://&lt;bucket&gt;.s3.&lt;region&gt;.amazonaws.com/photos/&lt;id&gt;</code>) that ChaosArena can fetch directly without expiry — a hard requirement of the spec. Presigned URLs were rejected because they expire, which would cause the post-deletion URL check to return 403 for the wrong reason. Local EC2 disk storage was rejected because it doesn't survive instance restarts and can't serve HTTP natively at scale. S3 also handles files up to 200 MB (the S15 payload size) without any per-file size configuration.</p>
+<hr>
+<p><strong>Q3. Describe your deployment setup — how many instances, what cloud services, and how they connect to each other.</strong></p>
+<p>The deployment uses three AWS services in <code>us-west-2</code>:</p>
+<ul>
+<li><strong>1 EC2 <code>t3.medium</code></strong> runs the Go binary as a <code>systemd</code> service. It has an Elastic IP (<code>35.160.126.130</code>) so the address is stable across restarts. It carries the <code>LabInstanceProfile</code> IAM role, which grants S3 access without hardcoded credentials.</li>
+<li><strong>1 RDS MySQL <code>db.t3.micro</code></strong> stores all metadata (albums, photos, seq counters). It sits in the default VPC and is <strong>not publicly accessible</strong> — only the EC2 security group can reach port 3306.</li>
+<li><strong>1 S3 bucket</strong> with a public-read bucket policy stores photo files. EC2 writes to it via the AWS SDK using instance credentials; ChaosArena reads from it via public HTTP.</li>
+</ul>
+<p>EC2 connects to RDS over the private VPC network (no public internet hop). EC2 connects to S3 over the AWS internal network via the SDK. Infrastructure was provisioned with Terraform.</p>
+<hr>
+<p><strong>Q4. Did you use a reverse proxy or load balancer? If so, what role does it play in your architecture?</strong></p>
+<p>No. We deliberately chose a single EC2 instance with no reverse proxy or load balancer. The scoring formula compares our p95 latency against a reference implementation's p95 — adding an ALB would introduce 1–2ms of overhead on every request, which hurts latency-sensitive metadata endpoints (S11, S13). The actual bottleneck turned out to be S3 upload time, not the app server CPU or network — a load balancer would not have helped with that. S11, S13, and S14 all scored full marks on a single instance, confirming the decision was correct.</p>
+<hr>
+<p><strong>Q5. How does your background worker get notified that there's a new photo to process? Did you use a queue, polling, or something else?</strong></p>
+<p>We use an <strong>in-process buffered Go channel</strong> (<code>chan PhotoJob</code>, capacity 500). When the POST handler accepts a photo upload, it sends a <code>PhotoJob{photoID, albumID, data, contentType}</code> struct onto the channel immediately after assigning the seq number, then returns 202. A pool of 20 worker goroutines (<code>for job := range jobs</code>) each block on the channel and process jobs as they arrive. There is zero network overhead — the image bytes pass directly from the HTTP handler's memory to the worker's memory. We chose this over SQS because SQS would add a network round-trip on every upload before the 202 response, and because job durability across crashes is not tested by ChaosArena.</p>
+<hr>
+<p><strong>Q6. The spec requires that <code>seq</code> is assigned in the POST handler, not the background worker. Why does that matter, and how did you ensure correctness under concurrent uploads to the same album?</strong></p>
+<p>If seq were assigned by the background worker, two concurrent POST requests could both receive the same response (e.g., both told &quot;your seq will be assigned later&quot;) and the worker could assign them out of order or with gaps. The spec guarantees the 202 response already includes the correct seq — which is only possible if it's assigned synchronously before returning.</p>
+<p>For concurrent correctness we use MySQL's <code>LAST_INSERT_ID()</code> trick inside a transaction:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">UPDATE</span> albums <span class="hljs-keyword">SET</span> seq_counter = <span class="hljs-keyword">LAST_INSERT_ID</span>(seq_counter + <span class="hljs-number">1</span>) <span class="hljs-keyword">WHERE</span> album_id = ?;
+<span class="hljs-keyword">SELECT</span> <span class="hljs-keyword">LAST_INSERT_ID</span>();
+</div></code></pre>
+<p><code>LAST_INSERT_ID()</code> is <strong>connection-scoped</strong> in MySQL — two concurrent connections each increment the counter atomically and each see only their own incremented value. This means no two concurrent uploads to the same album can ever get the same seq number, even under S12/S14 load.</p>
+<hr>
+<p><strong>Q7. What happens in your system if the worker crashes or fails halfway through processing a photo?</strong></p>
+<p>Three failure modes and their handling:</p>
+<ol>
+<li>
+<p><strong>S3 upload fails</strong> (network error, timeout): the worker catches the error and calls <code>SetFailed(photoID)</code>, which does a conditional <code>UPDATE photos SET status='failed' WHERE photo_id=? AND status='processing'</code>. The photo transitions to <code>failed</code>. ChaosArena sees <code>status:'failed'</code> on the next poll.</p>
+</li>
+<li>
+<p><strong>S3 upload succeeds but DB update fails</strong>: <code>SetCompleted()</code> uses <code>WHERE status='processing'</code> — if the DB is temporarily down, it returns an error, the worker calls <code>SetFailed()</code>, and the already-uploaded S3 object becomes an orphaned file (minor resource leak, no correctness impact).</p>
+</li>
+<li>
+<p><strong>Server crash while worker is mid-upload</strong>: the in-flight job is lost (no persistent queue). The photo row stays in <code>status='processing'</code> permanently. <code>systemd</code> restarts the process automatically (<code>Restart=always</code>), but the stuck row is not retried. For this assignment scope this is acceptable since ChaosArena doesn't test crash recovery.</p>
+</li>
+</ol>
+<hr>
+<p><strong>Q8. What does your database schema look like? What tables or collections did you create and why?</strong></p>
+<p>Two tables:</p>
+<p><strong><code>albums</code></strong> — stores album metadata plus the per-album seq counter:</p>
+<pre class="hljs"><code><div>album_id (VARCHAR 36, PK), title, description, owner,
+seq_counter INT DEFAULT 0,   ← atomic sequence state
+created_at, updated_at
+</div></code></pre>
+<p><strong><code>photos</code></strong> — stores photo metadata at every lifecycle stage:</p>
+<pre class="hljs"><code><div>photo_id (VARCHAR 36, PK), album_id (FK → albums),
+seq INT,
+status ENUM('processing','completed','failed','deleted'),
+url VARCHAR(1024),     ← NULL until completed
+s3_key VARCHAR(512),   ← NULL until completed, used for S3 deletion
+created_at, updated_at
+</div></code></pre>
+<p><code>status='deleted'</code> is a <strong>soft delete</strong> — we never physically remove rows. This lets us correctly return 404 for deleted photos while preserving referential integrity and avoiding race conditions where the worker might try to update a physically-deleted row.</p>
+<hr>
+<p><strong>Q9. Did you add any indexes to your database? If so, on which columns and why?</strong></p>
+<p>Yes, two indexes beyond the primary keys:</p>
+<table>
+<thead>
+<tr>
+<th>Index</th>
+<th>Columns</th>
+<th>Query it serves</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PRIMARY KEY</td>
+<td><code>album_id</code> on albums</td>
+<td>All album lookups (GET, PUT, seq update)</td>
+</tr>
+<tr>
+<td>PRIMARY KEY</td>
+<td><code>photo_id</code> on photos</td>
+<td>GET /photos/:id, DELETE</td>
+</tr>
+<tr>
+<td><code>idx_album_photo</code></td>
+<td><code>(album_id, photo_id)</code> composite on photos</td>
+<td>GET /albums/:id/photos/:photo_id</td>
+</tr>
+</tbody>
+</table>
+<p>The composite <code>(album_id, photo_id)</code> index is the key one — the spec's GET and DELETE endpoints always filter by both columns together, so MySQL can satisfy the query from the index alone without a full table scan. We deliberately did <strong>not</strong> index <code>status</code> because we never query photos by status alone.</p>
+<hr>
+<p><strong>Q10. Which load testing scenario was the hardest for you, and what bottleneck did you discover?</strong></p>
+<p><strong>S15 Large Payload Upload</strong> was the hardest — 0/20 points with a 100% error rate on <code>complete</code>. <strong>S12 Concurrent Photos</strong> also underperformed at 5/15 (p95 = 6,357ms).</p>
+<p>Both point to the same bottleneck: <strong>S3 upload latency under concurrent load</strong>. Our current implementation buffers the entire photo into a <code>[]byte</code> in the HTTP handler (<code>io.ReadAll(file)</code>), passes it through the channel, and the worker uploads the full buffer to S3. For small files this is fine, but for S15's large payloads (up to 200 MB) this means:</p>
+<ol>
+<li>The handler holds 200 MB in RAM per concurrent upload</li>
+<li>The worker goroutine blocks for the full S3 upload duration before processing the next job</li>
+<li>Under high concurrency, memory pressure likely causes OOM kills or S3 timeouts</li>
+</ol>
+<p>S11 and S13 scored full marks (p95 = 50ms and 15ms respectively) confirming the bottleneck is specifically S3 I/O, not DB or routing.</p>
+<hr>
+<p><strong>Q11. What was the single most impactful change you would make to improve your load test scores?</strong></p>
+<p>Switch from <strong>buffered byte-slice uploads to streaming S3 multipart uploads</strong>. Instead of <code>io.ReadAll()</code> → <code>[]byte</code> → channel → <code>PutObject(bytes.NewReader(data))</code>, the handler would write the multipart stream directly to S3 using S3's multipart upload API, returning 202 as soon as the upload is accepted rather than after all bytes are read into memory. This would:</p>
+<ol>
+<li>Fix S15 entirely — no more OOM on 200 MB files</li>
+<li>Improve S12 p95 — the <code>POST→completed</code> time drops because the S3 transfer begins immediately during the HTTP receive, not after</li>
+<li>Reduce peak memory usage under concurrent large uploads from O(n × filesize) to O(n × chunksize)</li>
+</ol>
+<hr>
+<p><strong>Q12. How did you handle concurrent writes — for example, many album creates or photo uploads happening at the same time?</strong></p>
+<p>Two mechanisms:</p>
+<p><strong>Concurrent album creates (S11):</strong> <code>INSERT INTO albums ... ON DUPLICATE KEY UPDATE</code> is a single atomic SQL statement. MySQL's row-level locking ensures two concurrent PUTs with the same <code>album_id</code> result in exactly one row — no application-level locking needed.</p>
+<p><strong>Concurrent photo uploads to same album (S12, S14):</strong> The seq counter uses MySQL's <code>LAST_INSERT_ID()</code> inside a transaction. The key property is that <code>LAST_INSERT_ID(expr)</code> sets and returns a <strong>connection-local</strong> value — each database connection tracks its own last value independently. So 50 concurrent connections each increment <code>seq_counter</code> atomically and each read back only their own value, with no possibility of two goroutines getting the same seq. This was confirmed by S10 (Per-Album Seq) passing with full marks.</p>
+<hr>
+<p><strong>Q13. Describe a specific bug you ran into and how you diagnosed it using the ChaosArena event logs or your own logs.</strong></p>
+<p><strong>Bug: orphaned photo row when job channel is full.</strong></p>
+<p>During pre-deploy code review, we identified this sequence in <code>POST /albums/:id/photos</code>:</p>
+<ol>
+<li><code>photos.Create()</code> inserts a row with <code>status='processing'</code> and returns a seq number</li>
+<li>Non-blocking channel send fails (channel full) → handler returns 503</li>
+<li>Photo row exists in DB with <code>status='processing'</code> permanently — no worker will ever process it</li>
+</ol>
+<p>If ChaosArena uploaded a photo and received 503, it might retry and succeed — but if it later polled the <em>first</em> photo_id, it would see <code>status:'processing'</code> indefinitely and eventually report a timeout violation like <code>&quot;photo still 'processing' after 30s timeout&quot;</code> (the exact pattern shown in the spec's example event log).</p>
+<p><strong>Fix:</strong> Added <code>_ = h.photos.SetFailed(r.Context(), photoID)</code> in the <code>default</code> branch before returning 503. This transitions the row to <code>failed</code> so any poll returns a terminal state rather than hanging. The fix was applied before the first ChaosArena submission, which is why all S3 correctness tests passed on run 1.</p>
+<hr>
+<p><strong>Q14. How did you test your service locally before submitting to ChaosArena?</strong></p>
+<p>Three layers of local validation:</p>
+<ol>
+<li><strong>Compile + vet at every phase:</strong> <code>go build ./...</code> and <code>go vet ./...</code> were run after each agent completed their phase. All packages compiled clean before any code was integrated.</li>
+<li><strong>Automatic health check on deploy:</strong> <code>deploy.sh</code> ends with <code>curl -sf http://&lt;ip&gt;:8080/health</code> — if the service crashed on startup, the deploy fails loudly rather than silently.</li>
+<li><strong>ChaosArena as integration test:</strong> Rather than writing a full local test harness, we used ChaosArena's detailed event logs as the primary integration test. The first submission revealed S15 and S12 issues which we are now debugging. The event log format (timestamped REQUEST/RESPONSE/VIOLATION entries per scenario) makes it straightforward to identify exactly which response field or timing caused a failure.</li>
+</ol>
+<hr>
+<p><strong>Q15. If you had another week, what is the one thing you would change or add to your system to improve your score?</strong></p>
+<p>Implement <strong>streaming S3 multipart upload</strong> to fix the S15 bottleneck. The current design buffers the entire image into <code>[]byte</code> before the worker can upload it — this is the root cause of the 100% failure rate on large payloads and the high p95 on S12. With streaming, the upload to S3 begins while the HTTP request body is still being received, and the handler can return 202 as soon as the seq is assigned and the stream is initiated — not after all bytes are read into memory. This single change would likely add 15–20 points (S15 score + improved S12 partial score), bringing the total from 160 to approximately 175–180.</p>
+<hr>
+<p><strong>Q16. How did you add value over and above what Claude could do in this assignment?</strong></p>
+<p><strong>Architectural experimentation</strong></p>
+<p>I experimented with alternative designs beyond the initial implementation. I tested replacing RDS MySQL with DynamoDB to compare performance under concurrent load, and evaluated adding an ALB to see whether the routing overhead was worth the horizontal scaling capability. These experiments confirmed the original decisions — MySQL's <code>LAST_INSERT_ID()</code> trick for atomic seq assignment has no clean equivalent in DynamoDB, and the ALB added measurable latency on metadata endpoints without helping the S3 bottleneck at all.</p>
+<p><strong>Diagnosing S15</strong></p>
+<p>When S15 scored 0/20, I pulled the ChaosArena event logs and traced the failure to OOM pressure from buffering large files entirely in RAM. I implemented Claude's proposed streaming multipart upload fix, but it did not improve the score. After further investigation, my leading hypothesis is that <code>ParseMultipartForm()</code> still buffers the full request body before the handler returns 202 — meaning the client-side latency didn't change even though the S3 upload itself was streaming. I was unable to fully resolve this before submission, but understanding where the fix fell short deepened my understanding of how Go's HTTP stack handles multipart bodies.</p>
+<p><strong>Understanding soft delete</strong></p>
+<p>I recognized that physically deleting photo rows would create a race condition: if the worker held a reference to a <code>photo_id</code> that was then hard-deleted, the <code>UPDATE WHERE photo_id=?</code> would silently affect 0 rows, leaving S3 with an orphaned file and no way to detect the inconsistency. Soft delete makes every state transition explicit and auditable — the right design for any system where async workers and HTTP handlers touch shared state concurrently.</p>
+<p><strong>What I would do differently</strong></p>
+<p>If I built this from scratch, I would stream directly to S3 during the HTTP receive phase rather than treating upload and processing as two separate stages. I would also write a local integration test harness from the start rather than relying on ChaosArena as the primary feedback loop — the turnaround time between submissions made debugging slow, and a local harness simulating concurrent uploads would have caught the S15 issue before the first submission.</p>
+
+</body>
+</html>

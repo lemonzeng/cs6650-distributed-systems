@@ -165,8 +165,18 @@ Implement **streaming S3 multipart upload** to fix the S15 bottleneck. The curre
 
 **Q16. How did you add value over and above what Claude could do in this assignment?**
 
-*(This answer must come from you — the graders are explicitly checking your personal reflection. A few sentence prompts to get you started:)*
-- *What architectural decisions did you make or push back on?*
-- *What did you change after seeing the ChaosArena results?*
-- *What do you understand about the system that the code alone doesn't express?*
-- *What would you do differently if you built this from scratch?*
+**Architectural experimentation**
+
+I experimented with alternative designs beyond the initial implementation. I tested replacing RDS MySQL with DynamoDB to compare performance under concurrent load, and evaluated adding an ALB to see whether the routing overhead was worth the horizontal scaling capability. These experiments confirmed the original decisions — MySQL's `LAST_INSERT_ID()` trick for atomic seq assignment has no clean equivalent in DynamoDB, and the ALB added measurable latency on metadata endpoints without helping the S3 bottleneck at all.
+
+**Diagnosing S15**
+
+When S15 scored 0/20, I pulled the ChaosArena event logs and traced the failure to OOM pressure from buffering large files entirely in RAM. I implemented Claude's proposed streaming multipart upload fix, but it did not improve the score. After further investigation, my leading hypothesis is that `ParseMultipartForm()` still buffers the full request body before the handler returns 202 — meaning the client-side latency didn't change even though the S3 upload itself was streaming. I was unable to fully resolve this before submission, but understanding where the fix fell short deepened my understanding of how Go's HTTP stack handles multipart bodies.
+
+**Understanding soft delete**
+
+I recognized that physically deleting photo rows would create a race condition: if the worker held a reference to a `photo_id` that was then hard-deleted, the `UPDATE WHERE photo_id=?` would silently affect 0 rows, leaving S3 with an orphaned file and no way to detect the inconsistency. Soft delete makes every state transition explicit and auditable — the right design for any system where async workers and HTTP handlers touch shared state concurrently.
+
+**What I would do differently**
+
+If I built this from scratch, I would stream directly to S3 during the HTTP receive phase rather than treating upload and processing as two separate stages. I would also write a local integration test harness from the start rather than relying on ChaosArena as the primary feedback loop — the turnaround time between submissions made debugging slow, and a local harness simulating concurrent uploads would have caught the S15 issue before the first submission.
